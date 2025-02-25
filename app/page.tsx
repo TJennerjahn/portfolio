@@ -20,8 +20,8 @@ export default function Page() {
 
         <p>Some of my past work can be seen on the Projects page.</p>
         <p>
-          If you're interested in transformative AI, small-scale manufacturing,
-          productivity or mechanical keyboard, check out my Blog.
+          If you're interested in digital minimalism, transformative AI,
+          small-scale manufacturing or mechanical keyboards, check out my Blog.
         </p>
         <p>Send me a message if you want to hire me or just chat.</p>
       </div>
