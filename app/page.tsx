@@ -14,9 +14,9 @@ export default function Page() {
           and building mechanical keyboards.
           `}
       </p>
-      <div className="my-8">
-        <BlogPosts />
-      </div>
+      {/* <div className="my-8"> */}
+      {/*   <BlogPosts /> */}
+      {/* </div> */}
     </section>
   );
 }
