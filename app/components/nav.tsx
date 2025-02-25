@@ -37,7 +37,7 @@ export function Navbar() {
   return (
     <header className="top-0 w-full z-10 mb-10">
       <div className="flex justify-center py-2">
-        <nav className="flex items-center bg-zinc-900/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg ring-1 ring-zinc-800">
+        <nav className="flex items-center bg-zinc-900/90 backdrop-blur-sm rounded-3xl p-1 shadow-lg ring-1 ring-zinc-800">
           {Object.entries(navItems).map(([path, { name, icon }]) => {
             const isActive = pathname === path;
 
@@ -62,11 +62,11 @@ export function Navbar() {
 
                 {/* Background highlight for active item */}
                 {isActive && (
-                  <span className="absolute inset-0 bg-zinc-700/50 rounded-full -z-10"></span>
+                  <span className="absolute inset-0 bg-zinc-700/50 rounded-2xl -z-10"></span>
                 )}
 
                 {/* Hover background highlight */}
-                <span className="absolute inset-0 bg-zinc-700/30 rounded-full opacity-0 hover:opacity-100 transition-opacity -z-10"></span>
+                <span className="absolute inset-0 bg-zinc-700/30 rounded-2xl opacity-0 hover:opacity-100 transition-opacity -z-10"></span>
               </Link>
             );
           })}
