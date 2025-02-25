@@ -1,4 +1,5 @@
 import Image from "next/image";
+import MailToButton from "./components/mailtoButton";
 export default function Page() {
   return (
     <section className="flex flex-col items-start">
@@ -14,14 +15,17 @@ export default function Page() {
       <h1 className="mb-8 text-2xl font-light tracking-tighter">
         Hi, I'm Tobias.
       </h1>
-      <p className="mb-4 text-gray-400">
-        {`Recent Computer Science graduate interested in building better software. \n 
-          On this page you can find some of the projects I've worked on, 
-          as well as my thoughts on a myriad of topics including my experience with homelabbing, 
-          the future of transformative AI, experiments with small-scale manufacturing
-          and building mechanical keyboards.
-          `}
-      </p>
+      <div className="mb-4 text-gray-400">
+        <p>I build software and write about things. </p>
+
+        <p>Some of my past work can be seen on the Projects page.</p>
+        <p>
+          If you're interested in transformative AI, small-scale manufacturing,
+          productivity or mechanical keyboard, check out my Blog.
+        </p>
+        <p>Send me a message if you want to hire me or just chat.</p>
+      </div>
+      <MailToButton />
     </section>
   );
 }
