@@ -38,38 +38,43 @@ export function Navbar() {
     <header className="top-0 w-full z-10 mb-10">
       <div className="flex justify-center py-2">
         <nav className="flex items-center bg-zinc-900/90 backdrop-blur-sm rounded-3xl p-1 shadow-lg ring-1 ring-zinc-800">
-          {Object.entries(navItems).map(([path, { name, icon }]) => {
-            const isActive = pathname === path;
+          {Object.entries(navItems).map(
+            ([path, { name, icon }]: [
+              string,
+              { name: string; icon?: React.ReactNode },
+            ]) => {
+              const isActive = pathname === path;
 
-            return (
-              <Link
-                key={path}
-                href={path}
-                className={`
+              return (
+                <Link
+                  key={path}
+                  href={path}
+                  className={`
                   relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200
                   ${isActive
-                    ? "text-white"
-                    : "text-zinc-400 hover:text-zinc-200"
-                  }
+                      ? "text-white"
+                      : "text-zinc-400 hover:text-zinc-200"
+                    }
                 `}
-              >
-                <span
-                  className={`${isActive ? "text-white" : "text-zinc-300"} ${icon ? "" : "hidden"}`}
                 >
-                  {icon}
-                </span>
-                {name}
+                  <span
+                    className={`${isActive ? "text-white" : "text-zinc-300"} ${icon ? "" : "hidden"}`}
+                  >
+                    {icon}
+                  </span>
+                  {name}
 
-                {/* Background highlight for active item */}
-                {isActive && (
-                  <span className="absolute inset-0 bg-zinc-700/50 rounded-2xl -z-10"></span>
-                )}
+                  {/* Background highlight for active item */}
+                  {isActive && (
+                    <span className="absolute inset-0 bg-zinc-700/50 rounded-2xl -z-10"></span>
+                  )}
 
-                {/* Hover background highlight */}
-                <span className="absolute inset-0 bg-zinc-700/30 rounded-2xl opacity-0 hover:opacity-100 transition-opacity -z-10"></span>
-              </Link>
-            );
-          })}
+                  {/* Hover background highlight */}
+                  <span className="absolute inset-0 bg-zinc-700/30 rounded-2xl opacity-0 hover:opacity-100 transition-opacity -z-10"></span>
+                </Link>
+              );
+            },
+          )}
         </nav>
       </div>
     </header>
