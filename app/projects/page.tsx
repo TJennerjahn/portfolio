@@ -1,13 +1,16 @@
 "use client";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { FaReact } from "react-icons/fa";
 import { SiPostgresql } from "react-icons/si";
 import { FaPython } from "react-icons/fa";
 import { FaLinux } from "react-icons/fa";
 import { FaRust } from "react-icons/fa";
 import { RiSvelteLine } from "react-icons/ri";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 export default function ProjectCards() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   // Sample project data - replace with your actual projects
   const projects = [
     {
@@ -44,7 +47,7 @@ export default function ProjectCards() {
 
   const scrollContainerRef = useRef(null);
 
-  // Scroll to first card on initial load
+  // Scroll to first card on initial load and handle wheel events
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
 
@@ -53,38 +56,49 @@ export default function ProjectCards() {
       setTimeout(() => {
         scrollContainer.scrollLeft = 0;
       }, 100);
+
+      // Handle vertical wheel scroll for horizontal scrolling
+      const handleWheel = (e: WheelEvent) => {
+        if (e.deltaY !== 0) {
+          e.preventDefault();
+          scrollContainer.scrollLeft += e.deltaY;
+        }
+      };
+
+      // Add event listener to the scroll container
+      scrollContainer.addEventListener("wheel", handleWheel, {
+        passive: false,
+      });
+
+      // Cleanup event listener on unmount
+      return () => {
+        scrollContainer.removeEventListener("wheel", handleWheel);
+      };
     }
   }, []);
 
-  // Handle wheel events for horizontal scrolling
+  // Separate effect to track active index without affecting scroll behavior
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
-
     if (!scrollContainer) return;
 
-    const handleWheel = (event: WheelEvent) => {
-      const { deltaY } = event;
+    const handleScroll = () => {
+      const cardWidth = 320; // Width of each card
+      const spacing = 24; // Approximate spacing
+      const itemWidth = cardWidth + spacing;
 
-      // Only prevent default if we're scrolling the container
-      if (scrollContainer.contains(event.target as Node)) {
-        event.preventDefault();
+      const scrollPosition = scrollContainer.scrollLeft;
+      const itemIndex = Math.round(scrollPosition / itemWidth);
 
-        // Adjust the scroll amount for better UX
-        const scrollAmount = deltaY * 0.75;
-        scrollContainer.scrollBy({
-          left: scrollAmount,
-          behavior: "smooth",
-        });
-      }
+      setActiveIndex(Math.min(Math.max(itemIndex, 0), projects.length - 1));
     };
 
-    // Use document level event listener to ensure it's captured
-    document.addEventListener("wheel", handleWheel, { passive: false });
+    scrollContainer.addEventListener("scroll", handleScroll);
 
     return () => {
-      document.removeEventListener("wheel", handleWheel);
+      scrollContainer.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [projects.length]);
 
   return (
     <div className="relative w-full">
@@ -97,9 +111,7 @@ export default function ProjectCards() {
           WebkitOverflowScrolling: "touch",
           paddingLeft: "max(1rem, calc(50% - 160px))", // Half card width
           paddingRight: "max(1rem, calc(50% - 160px))", // Half card width
-          overflowY: "hidden", // Ensure no vertical scrolling
         }}
-        data-testid="project-scroll-container"
       >
         {projects.map((project) => (
           <div
@@ -151,6 +163,32 @@ export default function ProjectCards() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Scroll Indicators - Only visible on smaller screens */}
+      <div className="mt-4 flex flex-col items-center">
+        {/* Dot indicators */}
+        <div className="flex space-x-2 mb-2">
+          {projects.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                const scrollContainer = scrollContainerRef.current;
+                if (scrollContainer) {
+                  const cardWidth = 320;
+                  const spacing = 24;
+                  scrollContainer.scrollTo({
+                    left: index * (cardWidth + spacing),
+                    behavior: "smooth",
+                  });
+                }
+              }}
+              className={`w-2.5 h-2.5 rounded-full cursor-pointer transition-all duration-300 ${activeIndex === index ? "bg-gray-800 w-5" : "bg-gray-300"
+                }`}
+              aria-label={`Go to project ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
