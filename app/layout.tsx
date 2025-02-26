@@ -4,7 +4,6 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Noto_Sans, Montserrat } from "next/font/google";
 import { Navbar } from "../components/nav";
-// import Footer from "./components/footer";
 import { baseUrl } from "./sitemap";
 
 const noto = Noto_Sans({ subsets: ["latin"] });
