@@ -5,7 +5,7 @@ import { FaPython } from "react-icons/fa";
 import { FaLinux } from "react-icons/fa";
 import { FaRust } from "react-icons/fa";
 import { RiSvelteLine } from "react-icons/ri";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 
 export default function ProjectCards() {
   // Sample project data - replace with your actual projects
@@ -44,63 +44,114 @@ export default function ProjectCards() {
 
   const scrollContainerRef = useRef(null);
 
+  // Scroll to first card on initial load
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+
+    if (scrollContainer) {
+      // Small timeout to ensure the DOM is fully rendered
+      setTimeout(() => {
+        scrollContainer.scrollLeft = 0;
+      }, 100);
+    }
+  }, []);
+
+  // Handle wheel events for horizontal scrolling
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+
+    if (!scrollContainer) return;
+
+    const handleWheel = (event: WheelEvent) => {
+      const { deltaY } = event;
+
+      // Only prevent default if we're scrolling the container
+      if (scrollContainer.contains(event.target as Node)) {
+        event.preventDefault();
+
+        // Adjust the scroll amount for better UX
+        const scrollAmount = deltaY * 0.75;
+        scrollContainer.scrollBy({
+          left: scrollAmount,
+          behavior: "smooth",
+        });
+      }
+    };
+
+    // Use document level event listener to ensure it's captured
+    document.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      document.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
   return (
-    <div
-      ref={scrollContainerRef}
-      className="flex justify-center gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide"
-      style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-    >
-      {projects.map((project) => (
-        <div
-          key={project.id}
-          className="snap-center flex-shrink-0 first:ml-4 last:mr-4"
-        >
+    <div className="relative w-full">
+      <div
+        ref={scrollContainerRef}
+        className="flex overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide"
+        style={{
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          WebkitOverflowScrolling: "touch",
+          paddingLeft: "max(1rem, calc(50% - 160px))", // Half card width
+          paddingRight: "max(1rem, calc(50% - 160px))", // Half card width
+          overflowY: "hidden", // Ensure no vertical scrolling
+        }}
+        data-testid="project-scroll-container"
+      >
+        {projects.map((project) => (
           <div
-            className="relative flex flex-col rounded-xl shadow-lg"
-            style={{
-              width: "320px",
-              height: "480px",
-              backgroundColor: project.color,
-            }}
+            key={project.id}
+            className="snap-center flex-shrink-0 mx-3 first:ml-0 last:mr-0"
           >
-            {/* Card Number */}
             <div
-              className="absolute top-4 left-4 text-5xl font-serif"
+              className="relative flex flex-col rounded-xl shadow-lg"
               style={{
-                color: project.id === "III" ? "#f44336" : project.textColor,
+                width: "320px",
+                height: "480px",
+                backgroundColor: project.color,
               }}
             >
-              {project.id}
-            </div>
-
-            {/* Tech Stack Icons */}
-            <div className="absolute top-8 right-4 grid grid-cols-2 gap-2">
-              {project.techStack.map((icon) => icon)}
-            </div>
-
-            {/* Footer Content */}
-            <div className="flex-1 flex items-center justify-center text-4xl">
-              {/* {project.icon} */}{" "}
-            </div>
-
-            {/* Project Title & Subtitle */}
-            <div className="flex-1 p-6 text-center mb-4">
-              <h3
-                className="text-xl font-serif"
-                style={{ color: project.textColor }}
+              {/* Card Number */}
+              <div
+                className="absolute top-4 left-4 text-5xl font-serif"
+                style={{
+                  color: project.id === "III" ? "#f44336" : project.textColor,
+                }}
               >
-                {project.title}
-              </h3>
-              <p
-                className="text-xs tracking-wider mt-1"
-                style={{ color: project.textColor }}
-              >
-                {project.subtitle}
-              </p>
+                {project.id}
+              </div>
+              {/* Tech Stack Icons */}
+              <div className="absolute top-8 right-4 grid grid-cols-2 gap-2">
+                {project.techStack.map((icon, i) => (
+                  <div key={i}>{icon}</div>
+                ))}
+              </div>
+              {/* Footer Content */}
+              <div className="flex-1 flex items-center justify-center text-4xl">
+                {/* {project.icon} */}{" "}
+              </div>
+              {/* Project Title & Subtitle */}
+              <div className="flex-1 p-6 text-center mb-4">
+                <h3
+                  className="text-xl font-serif"
+                  style={{ color: project.textColor }}
+                >
+                  {project.title}
+                </h3>
+                <p
+                  className="text-xs tracking-wider mt-1"
+                  style={{ color: project.textColor }}
+                >
+                  {project.subtitle}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
