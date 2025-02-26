@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Github, Linkedin } from "lucide-react";
 
 const navItems = {
   "/": {
@@ -35,7 +36,8 @@ export function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="top-0 w-full z-10 mb-10">
+    <header className="flex justify-between top-0 w-full z-10 mb-10">
+      <div>{/* Top Left Placeholder */}</div>
       <div className="flex justify-center py-2">
         <nav className="flex items-center bg-zinc-900/90 backdrop-blur-sm rounded-3xl p-1 shadow-lg ring-1 ring-zinc-800">
           {Object.entries(navItems).map(
@@ -76,6 +78,14 @@ export function Navbar() {
             },
           )}
         </nav>
+      </div>
+      <div className="flex items-center justify-end gap-x-3">
+        <Link href="https://www.github.com/TJennerjahn">
+          <Github />
+        </Link>
+        <Link href="https://www.linkedin.com/in/tobias-jennerjahn-90b644160/">
+          <Linkedin />
+        </Link>
       </div>
     </header>
   );
