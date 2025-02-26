@@ -36,7 +36,7 @@ export function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="flex justify-between top-0 w-full z-10 mb-10">
+    <header className="flex max-w-xl self-center justify-between top-0 w-full z-10 mb-10">
       <div>{/* Top Left Placeholder */}</div>
       <div className="flex justify-center py-2">
         <nav className="flex items-center bg-zinc-900/90 backdrop-blur-sm rounded-3xl p-1 shadow-lg ring-1 ring-zinc-800">

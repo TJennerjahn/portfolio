@@ -1,5 +1,5 @@
 import Image from "next/image";
-import MailToButton from "./components/mailtoButton";
+import MailToButton from "../../components/mailtoButton";
 export default function Page() {
   return (
     <section className="flex flex-col items-start">
