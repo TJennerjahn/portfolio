@@ -29,7 +29,7 @@ const navItems = {
   "/projects": {
     name: "Projects",
   },
-  "/blog": {
+  "/blog/articles": {
     name: "Blog",
   },
 };
