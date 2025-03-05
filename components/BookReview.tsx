@@ -42,7 +42,7 @@ export function BookReview({
               {formatDate(post.metadata.publishedAt, false)}
             </p>
 
-            <p className="text-xs text-neutral-300 text-justify w-4/5 max-h-36 py-2">
+            <p className="text-xs text-neutral-300 text-justify md:w-4/5 max-h-36 py-2">
               {bookData.description.length > 250
                 ? `${bookData.description.substring(0, 250)}...`
                 : bookData.description}
