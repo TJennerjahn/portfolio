@@ -20,7 +20,7 @@ export function BookReview({
       >
         <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-4">
           {bookData.imageUrl ? (
-            <div className="min-h-36 min-w-24 relative rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105">
+            <div className="min-h-36 min-w-24 max-w-24 relative rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105">
               <Image
                 src={bookData.imageUrl.toString()}
                 alt={`Cover for ${post.metadata.title}`}
