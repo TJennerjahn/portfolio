@@ -1,12 +1,26 @@
-import { formatDate, getPosts } from "app/blog/utils";
+import { getPosts } from "app/blog/utils";
 import { BookReview } from "components/BookReview";
+import getBookByISBN from "lib/hardcover";
+
 export const metadata = {
   title: "Reviews",
   description: "Book and other media reviews",
 };
 
-export default function Page() {
+export default async function Page() {
   const reviews = getPosts().filter((e) => e.metadata.type === "Review");
+
+  // Create a map to store book data for each review
+  const bookDataMap = new Map();
+
+  // Fetch book data for each review
+  for (const review of reviews) {
+    if (review.metadata.isbn) {
+      const bookData = await getBookByISBN(review.metadata.isbn);
+      bookDataMap.set(review.slug, bookData);
+    }
+  }
+
   return (
     <section>
       <h1 className="font-semibold text-2xl mb-8 tracking-tighter">Reviews</h1>
@@ -23,7 +37,11 @@ export default function Page() {
             return 1;
           })
           .map((post) => (
-            <BookReview post={post} />
+            <BookReview
+              key={post.slug}
+              post={post}
+              bookData={bookDataMap.get(post.slug)}
+            />
           ))}
       </div>
     </section>
