@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Post, formatDate } from "app/blog/utils";
 import Image from "next/image";
-import { BookOpen } from "lucide-react";
+import { BookOpen, CalendarDays, UserPen } from "lucide-react";
 import { BookData } from "lib/hardcover";
 
 export function BookReview({
@@ -38,9 +38,10 @@ export function BookReview({
               {post.metadata.title}
             </p>
 
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 tabular-nums">
-              {formatDate(post.metadata.publishedAt, false)}
-            </p>
+            <div className="flex gap-x-1 items-center">
+              <UserPen size={14} />
+              <p>{bookData.authors.join(", ")}</p>
+            </div>
 
             <p className="text-xs text-neutral-300 text-justify md:w-4/5 max-h-36 py-2">
               {bookData.description.length > 250
@@ -48,9 +49,18 @@ export function BookReview({
                 : bookData.description}
             </p>
 
-            <div className="flex gap-x-1 items-center text-neutral-400">
-              <BookOpen size={12} />
-              <p className="text-xs">{bookData.pageCount}</p>
+            <div className="flex gap-x-4 items-center text-xs text-neutral-400">
+              <div className="flex gap-x-1 items-center">
+                <BookOpen size={12} />
+                <p className="text-xs">{bookData.pageCount}</p>
+              </div>
+
+              <div className="flex gap-x-1 items-center">
+                <CalendarDays size={12} />
+                <p className="tabular-nums">
+                  {formatDate(post.metadata.publishedAt, false)}
+                </p>
+              </div>
             </div>
           </div>
         </div>

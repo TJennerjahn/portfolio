@@ -6,6 +6,7 @@ export type BookData = {
   description: String;
   pageCount: String;
   isbn_13: String;
+  authors: String[];
 };
 
 const endpoint = "https://api.hardcover.app/v1/graphql";
@@ -35,10 +36,14 @@ export default async function getBookByISBN(isbn_13: String) {
         publisher {
           name
         }
-        cached_image
         cached_tags
         image {
           url
+        }
+        contributions {
+          author {
+            name
+          }
         }
       }
     }
@@ -54,14 +59,24 @@ export default async function getBookByISBN(isbn_13: String) {
     }
 
     const edition = data.editions[0];
+    // Extract author names from contributions
+    const authors = edition.contributions
+      ? edition.contributions
+        .filter(
+          (contribution: any) =>
+            contribution.author && contribution.author.name,
+        )
+        .map((contribution: any) => contribution.author.name as String)
+      : [];
 
     // Create and return a BookData object
     const bookData: BookData = {
       title: edition.title || "",
-      imageUrl: edition.image?.url || edition.cached_image || "",
+      imageUrl: edition.image?.url || "",
       description: edition.description || "",
       pageCount: edition.pages ? String(edition.pages) : "",
       isbn_13: edition.isbn_13 || String(isbn_13),
+      authors: authors,
     };
 
     return bookData;
