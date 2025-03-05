@@ -1,11 +1,19 @@
 import fs from "fs";
 import path from "path";
 
+export type Post = {
+  metadata: Metadata;
+  slug: string;
+  content: string;
+};
+
 type Metadata = {
   title: string;
   publishedAt: string;
   summary: string;
   image?: string;
+  type: string;
+  isbn?: string;
 };
 
 function parseFrontmatter(fileContent: string) {
@@ -35,7 +43,7 @@ function readMDXFile(filePath) {
   return parseFrontmatter(rawContent);
 }
 
-function getMDXData(dir) {
+function getMDXData(dir): Post[] {
   let mdxFiles = getMDXFiles(dir);
   return mdxFiles.map((file) => {
     let { metadata, content } = readMDXFile(path.join(dir, file));
@@ -49,7 +57,7 @@ function getMDXData(dir) {
   });
 }
 
-export function getBlogPosts() {
+export function getPosts() {
   return getMDXData(path.join(process.cwd(), "app", "blog", "posts"));
 }
 
