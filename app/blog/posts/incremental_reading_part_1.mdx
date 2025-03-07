@@ -1,0 +1,58 @@
+---
+title: Incremental Reading: Part 1 - Introduction
+type: Post
+publishedAt: 2025-03-07
+---
+Spaced Repetition as a method for retaining information has found an ever growing community of advocates. There's some real science behind why it works and programs like Anki have made it easily accessible.
+
+It's particularly popular among students for obvious reasons, but even beyond that, people have made it a core part of their workflow with a lot of success.
+
+Eventually, many fans of spaced repetition stumble upon a related concept that enjoys far less popularity: Incremental Reading.
+
+As far as I can tell, Incremental Reading is the brain-child of Piotr Woźniak who developed the technique as part of his work on the spaced repetition software SuperMemo.
+
+He describes Incremental Reading as follows:
+
+> **Incremental Reading (IR)** is a technique for organizing learning in a way that encourages _variety of studying material_ and _iterative problem solving_. By contrast, traditional reading involves a linear process of reading a single topic for extended periods of time.
+
+> In Incremental Reading, all the material yet to be processed is added into a queue. **Each element** in the queue is **examined in succession**.
+> How long to study each element before moving on to the next one is left at the discretion of the user’s own heuristics. Typical triggers for making that decision include decreases in concentration or pleasure.
+
+[Source](https://www.supermemo.wiki/en/learning/incremental-reading)
+
+
+The core idea can be boiled down to this:
+
+1. Put everything you eventually want to read into a queue
+2. When reading, highlight anything you want to remember for further processing
+3. As soon as you get bored, move on to the next element in the queue
+
+The annotations made during reading can then eventually get processed however you like, presumable turning them into flashcards or cloze deletions for spaced repetition.
+
+This process has a couple of properties that were very intriguing for me:
+
+1. **Removes Friction**: The reading queue removes all points of friction for starting to read. A problem that I regularly face is having to decide what to read. Do I pick up a book, or an article, or that paper I bookmarked? If you have a lot of things bookmarked, this alone can lead to decision fatigue. By adding a queue the decision gets reduced from a multiple choice question with potentially hundreds of options to a binary choice ("Do I like what the queue presented or check out the next element").
+
+2. **No commitment**: Since the system keeps track of your position for any given text, reading an article no longer requires the commitment to finish it. I can't count how many times I've opened up a genuinely interesting article, only to realise that I don't have the time, or the focus required to read it fully. So I bookmark it, where it vanishes in a sea of other super-interesting articles that I'm definitely, absolutely going to read... some day. This fully eliminates that problem of having to finish an article when I start and with it any commitment required from me that might keep me from starting at all. Even if I read just a paragraph, or a single sentence, I don't lose that progress.
+
+3.  **Annotations come with sources and context**: If you're an avid Anki user, then you'll probably have experienced this: You create a card, understand it and learn it. Then, months later the card is up for review and you realize that you are missing crucial context without which your card is pretty useless. This isn't a problem for well written cards but alas not all cards are. At this point it would be great if you could go back to the exact passage that your card is based on. If your cards and your reading material exist in the same system, then a connection between the two can exist.
+
+
+If you read this and think "Great! How do I try it?", then I have to disappoint you.
+SuperMemo as a product still exists and is even still in development. However it is only available for windows and looks like this: 
+
+![SuperMemo Screenshot](/20250307154102.png)
+
+I have no doubt that SuperMemo is a powerful, feature rich system, laser-focused on productivity. But if I'm going to shift everything I read over to a piece of software, then it has to deliver an outstanding reading experience, otherwise I simply won't use it.
+
+Also, being windows only is an absolute nonstarter for me. I don't use windows, but even if I did, I don't want to do all my reading in front of a computer.
+
+There is an alternative for Anki, but it suffers from a similar problem:
+
+![Anki Screenshot](/20250307155407.png)
+
+And that's it. Those are the two options. I've looked around and there doesn't seem to exist an alternative that delivers both a good implementation of Incremental Reading *and* an enjoyable reading experience.
+
+I think Incremental Reading has the potential to fundamentally transform how I consume written media. But to truly evaluate how well it can work it seems that I have to build it first.
+
+So that's what I'll do. In Part II of this series I'll focus on creating a set of requirements that a *good* IR experience would have to deliver and then subsequently work on implementing them.
