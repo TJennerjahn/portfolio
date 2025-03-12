@@ -86,6 +86,7 @@ export default function ProjectCards() {
         <FaLinux size="2em" color="#0f1d40" />,
       ],
       image: "hero_image_2.png",
+      project_url: "https://github.com/TJennerjahn/eyesight",
     },
     {
       idx: 2,
@@ -311,18 +312,22 @@ export default function ProjectCards() {
                   <div
                     className={`flex space-x-4 mt-6 ${selectedProject.idx % 2 == 0 ? "justify-start" : "justify-end"} z-2`}
                   >
-                    <Link href={selectedProject.project_url || "#"}>
-                      <motion.button
-                        className="px-4 py-2 bg-navy text-white rounded-lg"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                    <motion.button
+                      className="px-4 py-2 bg-navy text-white rounded-lg cursor-pointer"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Link
+                        href={selectedProject.project_url || "#"}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
                         View Project
-                      </motion.button>
-                    </Link>
+                      </Link>
+                    </motion.button>
                     <motion.button
                       onClick={closeModal}
-                      className="px-4 py-2 rounded-lg border border-navy text-navy"
+                      className="px-4 py-2 rounded-lg border border-navy text-navy cursor-pointer"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
