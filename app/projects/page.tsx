@@ -7,12 +7,27 @@ import { FaRust } from "react-icons/fa";
 import { RiSvelteLine } from "react-icons/ri";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ReactNode } from "react";
+
+interface Project {
+  idx: number;
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  features?: string[];
+  color: string;
+  textColor: string;
+  techStack: ReactNode[];
+  image?: string;
+  project_url?: string;
+  backgroundColor?: string;
+}
 
 export default function ProjectCards() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState(null);
-  const openModal = (e, project) => {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const openModal = (e: React.MouseEvent, project: Project) => {
     e.preventDefault(); // Prevent Link navigation
     setSelectedProject(project);
     setIsOpen(true);
