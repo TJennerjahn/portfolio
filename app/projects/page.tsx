@@ -7,7 +7,7 @@ import { FaRust } from "react-icons/fa";
 import { RiSvelteLine } from "react-icons/ri";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ProjectCards() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +21,14 @@ export default function ProjectCards() {
   const closeModal = () => {
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else document.body.style.overflow = "scroll";
+    return () => { };
+  }, [isOpen]);
+
   // Sample project data - replace with your actual projects
   const projects = [
     {
@@ -28,6 +36,13 @@ export default function ProjectCards() {
       id: "I",
       title: "Increader",
       subtitle: "Incremental Reading Platform",
+      description:
+        "Increader is an all-in-one reading-platform that aims to offer the best reading experience for all text-based content, including Books, Articles and Papers. I've written extensively about my rationale behind its featureset and design, but it's also free to try.",
+      features: [
+        "Built around incremental reading techniques",
+        "Easy annotations and highlights across all document types",
+        "Deeply integrated spaced-repetition support",
+      ],
       color: "#f5f5f0",
       textColor: "#0f1d40",
       techStack: [
@@ -42,6 +57,13 @@ export default function ProjectCards() {
       id: "II",
       title: "EyeSight",
       subtitle: "Timed Screensaver promoting Eye Health",
+      description:
+        "EyeSight is a minimal tray application that uses evidence-based techniques to reduce eye-strain during prolonged screen usage by forcing the user to take short 30 second breaks every 30 minutes.",
+      features: [
+        "Cross-platform support",
+        "Integrates with Polybar and other status bars",
+        "Extremely light-weight",
+      ],
       color: "#f5f5f0",
       textColor: "#0f1d40",
       techStack: [
@@ -55,6 +77,13 @@ export default function ProjectCards() {
       id: "III",
       title: "Palette",
       subtitle: "Keyboard-based Application Quicklauncher",
+      description:
+        "Palette is a fast, beautiful application launcher that focuses on keyboard-based workflows. Oh and it's written in Rust.",
+      features: [
+        "Fuzzy search to minimize necessary key-strokes",
+        "Doubles as switcher between applications and windows",
+        "Works on Linux and MacOs",
+      ],
       color: "#f5f5f0",
       textColor: "#0f1d40",
       techStack: [
@@ -163,7 +192,7 @@ export default function ProjectCards() {
             <motion.div
               layoutId={`card-container-${selectedProject.id}`}
               className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-                         w-[90%] max-w-[750px] sm:w-[80%] h-[90vh] sm:h-[500px] rounded-xl shadow-2xl overflow-hidden"
+                         w-[90%] max-w-[750px] sm:w-[80%] h-[600px] sm:h-[500px] rounded-xl shadow-2xl overflow-hidden"
               style={{
                 backgroundColor: selectedProject.backgroundColor || "#f1f1f1",
               }}
@@ -193,7 +222,7 @@ export default function ProjectCards() {
                 {/* Project Title & Subtitle - Preserve position from card */}
                 <motion.div
                   layoutId={`content-container-${selectedProject.id}`}
-                  className={`absolute bottom-4 ${selectedProject.idx % 2 == 0 ? "text-left left-4" : "text-right right-4"}`}
+                  className={`absolute top-16 ${selectedProject.idx % 2 == 0 ? "text-left left-4" : "text-right right-4"} z-2`}
                 >
                   <motion.h3
                     layoutId={`title-${selectedProject.id}`}
@@ -213,7 +242,7 @@ export default function ProjectCards() {
                 {selectedProject.image && (
                   <motion.div
                     layoutId={`image-container-${selectedProject.id}`}
-                    className={`absolute ${selectedProject.idx % 2 === 0 ? "-right-48" : "-left-48"} top-0 bottom-0 h-full overflow-hidden`}
+                    className={`absolute ${selectedProject.idx % 2 === 0 ? "right-0" : "left-0"} blur-2xl md:blur-lg top-0 bottom-0 h-full overflow-hidden`}
                   >
                     <motion.img
                       layoutId={`image-${selectedProject.id}`}
@@ -239,7 +268,10 @@ export default function ProjectCards() {
                   {/* Features list */}
                   <div className="mb-6">
                     <h4 className="text-lg font-medium mb-2">Key Features:</h4>
-                    <ul className="list-disc pl-5 space-y-1">
+                    <ul
+                      dir={selectedProject.idx % 2 == 0 ? "ltr" : "rtl"}
+                      className="list-disc pl-5 space-y-1"
+                    >
                       {selectedProject.features ? (
                         selectedProject.features.map((feature, idx) => (
                           <li key={idx}>{feature}</li>
@@ -255,7 +287,9 @@ export default function ProjectCards() {
                   </div>
 
                   {/* Action buttons */}
-                  <div className="flex space-x-4 mt-6">
+                  <div
+                    className={`flex space-x-4 mt-6 ${selectedProject.idx % 2 == 0 ? "justify-start" : "justify-end"} z-2`}
+                  >
                     <Link href={selectedProject.project_url || "#"}>
                       <motion.button
                         className="px-4 py-2 bg-navy text-white rounded-lg"
