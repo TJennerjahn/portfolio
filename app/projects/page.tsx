@@ -300,7 +300,13 @@ export default function ProjectCards() {
                       )}
                     </ul>
                   </div>
-
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className={`absolute ${selectedProject.idx % 2 === 0 ? "text-left left-4" : "text-right right-4"} bottom-4 max-w-md text-navy`}
+                >
                   {/* Action buttons */}
                   <div
                     className={`flex space-x-4 mt-6 ${selectedProject.idx % 2 == 0 ? "justify-start" : "justify-end"} z-2`}
