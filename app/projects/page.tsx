@@ -163,7 +163,7 @@ export default function ProjectCards() {
             <motion.div
               layoutId={`card-container-${selectedProject.id}`}
               className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-                         w-[90vw] max-w-[750px] sm:w-[80%] h-[90vh] sm:h-[500px] rounded-xl shadow-2xl overflow-hidden"
+                         w-[90%] max-w-[750px] sm:w-[80%] h-[90vh] sm:h-[500px] rounded-xl shadow-2xl overflow-hidden"
               style={{
                 backgroundColor: selectedProject.backgroundColor || "#f1f1f1",
               }}
