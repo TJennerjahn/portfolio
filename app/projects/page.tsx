@@ -242,7 +242,7 @@ export default function ProjectCards() {
                 {selectedProject.image && (
                   <motion.div
                     layoutId={`image-container-${selectedProject.id}`}
-                    className={`absolute ${selectedProject.idx % 2 === 0 ? "right-0" : "left-0"} blur-2xl md:blur-lg top-0 bottom-0 h-full overflow-hidden`}
+                    className={`absolute ${selectedProject.idx % 2 === 0 ? "right-0" : "left-0"} blur-xl top-0 bottom-0 h-full overflow-hidden`}
                   >
                     <motion.img
                       layoutId={`image-${selectedProject.id}`}
