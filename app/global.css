@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --color-navy: #0f1d40;
+}
+
 ::selection {
   background-color: #fefefe;
   color: oklch(0.274 0.006 286.033);
