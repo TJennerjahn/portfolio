@@ -163,10 +163,9 @@ export default function ProjectCards() {
             <motion.div
               layoutId={`card-container-${selectedProject.id}`}
               className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-                         w-full max-w-3xl rounded-xl shadow-2xl overflow-hidden"
+                         w-[90vw] max-w-[750px] sm:w-[80%] h-[90vh] sm:h-[500px] rounded-xl shadow-2xl overflow-hidden"
               style={{
                 backgroundColor: selectedProject.backgroundColor || "#f1f1f1",
-                height: "500px", // Taller than the original card
               }}
             >
               <div className="relative h-full">
@@ -204,7 +203,7 @@ export default function ProjectCards() {
                   </motion.h3>
                   <motion.p
                     layoutId={`subtitle-${selectedProject.id}`}
-                    className="text-sm text-blue-800 mt-1"
+                    className="text-sm text-navy mt-1"
                   >
                     {selectedProject.subtitle}
                   </motion.p>
