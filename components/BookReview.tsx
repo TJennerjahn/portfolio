@@ -50,11 +50,12 @@ export function BookReview({
             </p>
 
             <div className="flex gap-x-4 items-center text-xs text-neutral-400">
-              <div className="flex gap-x-1 items-center">
-                <BookOpen size={12} />
-                <p className="text-xs">{bookData.pageCount}</p>
-              </div>
-
+              {bookData.pageCount && (
+                <div className="flex gap-x-1 items-center">
+                  <BookOpen size={12} />
+                  <p className="text-xs">{bookData.pageCount}</p>
+                </div>
+              )}
               <div className="flex gap-x-1 items-center">
                 <CalendarDays size={12} />
                 <p className="tabular-nums">
