@@ -276,10 +276,7 @@ export default function ProjectCards() {
                   transition={{ delay: 0.3 }}
                   className={`absolute ${selectedProject.idx % 2 === 0 ? "text-left left-4" : "text-right right-4"} top-32 max-w-md pr-4 text-navy`}
                 >
-                  <p className="mb-4">
-                    {selectedProject.description ||
-                      "This project aims to solve real-world problems through innovative technology solutions..."}
-                  </p>
+                  <p className="mb-4">{selectedProject.description}</p>
 
                   {/* Features list */}
                   <div className="mb-6">
@@ -288,17 +285,10 @@ export default function ProjectCards() {
                       dir={selectedProject.idx % 2 == 0 ? "ltr" : "rtl"}
                       className="list-disc pl-5 space-y-1"
                     >
-                      {selectedProject.features ? (
+                      {selectedProject.features &&
                         selectedProject.features.map((feature, idx) => (
                           <li key={idx}>{feature}</li>
-                        ))
-                      ) : (
-                        <>
-                          <li>Intuitive user interface</li>
-                          <li>Cross-platform compatibility</li>
-                          <li>Advanced data processing</li>
-                        </>
-                      )}
+                        ))}
                     </ul>
                   </div>
                 </motion.div>
