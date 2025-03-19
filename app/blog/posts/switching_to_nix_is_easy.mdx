@@ -16,7 +16,7 @@ A single declarative configuration file for your whole system, easily reproducib
 
 **Yes, Please!**
 
-It isn't without downsides however (or so I thought). Nix relies heavily on the eponymous configuration language that is so obtuse it doesn't even have its own Wikipedia entry. The ecosystem is build on top of a bunch of additional concepts that are much harder to grok than the basic idea, not least because they are terribly named. You got nixpkgs, modules, overlays and flakes. You got derivations and generations. There's nixos containers and nix shells. And then home-manager and more.
+It isn't without downsides however (or so I thought). Nix relies heavily on the eponymous configuration language that is so obtuse it doesn't even have its own Wikipedia entry. The ecosystem is build on top of a bunch of additional concepts that are much harder to grok than the basic idea, not least because they are terribly named. You got nixpkgs, modules, overlays and flakes. You got derivations and generations. There's nixos containers and nix shells. And don't even get me started with home-manager.
 
 And then some things seemingly require a lot more work than on other systems just to make them nix compatible, like the various configuration wrappers around neovim such as Nixvim, NVF or nixcats. How can I possibly argue that nixos is actually simple when the community can't even agree on the best way to *run* a program?
 
@@ -67,7 +67,9 @@ Here's a section from my `hardware-configuration.nix` that enables nvidia driver
 
 ```
 
-I copied this from a wiki article **verbatim** and it *just* worked. Just reload the config with `sudo nixos-rebuild switch`, reboot and be done with it. Even it hadn't worked, I could've just rolled back to the previous config (for which nixos conveniently creates grub entries) and be confident that no trace of the driver software would be left over. The worst case scenario on arch would require me to boot from a live-usb and chroot into my system and try to fix it. This *cannot* happen on NixOS.
+I copied this from a wiki article **verbatim** and it *just* worked. 
+
+Just reload the config with `sudo nixos-rebuild switch`, reboot and be done with it. Even it hadn't worked, I could've just rolled back to the previous config (for which nixos conveniently creates grub entries) and be confident that no trace of the driver software would be left over. The worst case scenario on arch would require me to boot from a live-usb and chroot into my system and try to fix it. This *cannot* happen on NixOS.
 
 
 After that I installed `hyprland`:
@@ -140,10 +142,14 @@ To close this out I want to mention two more minor pitfalls.
 The first one is simple: The shebang for bash scripts is different on NixOS.
 Instead of: `#!/bin/bash` you have to write `#!/usr/bin/env bash`. It's a drop in replacement and requires no other changes.
 
-The other one is more conceptual in nature: NixOS is still just linux.
+The other one is more conceptual in nature: **NixOS is still just linux.**
+
 You'll find hundreds of threads of nix users arguing over the best way to do certain things the nix way.
 That's how you get three competing aproaches to manage neovim. Reading those, it's easy to forget nix configuration files don't magically change how software works.
-All the usual config stuff going on in your `~/.config/` directory is still there and still works exactly as it does on any other distro. NixOS people like to find ways to manage all of that with the nix language, but that's not a requirement at all. I struggled to port over my neovim setup because I didn't see an AstroNvim package and I thought I had to deal with a complicated nix based wrapper, but that's just not the case. I ended up simply copying over my `.config/nvim` directory and it *just* worked. The only change I needed to make was to disable mason. It doesn't easily work on NixOS, but that's not a problem at all, because every language server you could dream of has a nix packages available and you can just add those to your `configuration.nix` and then enable them in neovim.
+
+All the usual config stuff going on in your `~/.config/` directory is still there and still works exactly as it does on any other distro. NixOS people like to find ways to manage all of that with the nix language, but that's not a requirement at all. 
+
+I struggled to port over my neovim setup because I didn't see an AstroNvim package and I thought I had to deal with a complicated nix based wrapper, but that's just not the case. I ended up simply copying over my `.config/nvim` directory and it *just* worked. The only change I needed to make was to disable mason. It doesn't easily work on NixOS, but that's not a problem at all, because every language server you could dream of has a nix packages available and you can just add those to your `configuration.nix` and then enable them in neovim.
 
 ---
 
