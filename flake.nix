@@ -16,8 +16,6 @@
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
             nodejs_20       # Node.js LTS version
-            yarn            # Include yarn (remove if using npm only)
-            git             # Optional, convenient for dev
           ];
 
           shellHook = ''
