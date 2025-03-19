@@ -86,7 +86,7 @@ export default function ProjectCards() {
         <FaLinux size="2em" color="#0f1d40" />,
       ],
       image: "hero_image_2.png",
-      project_url: "https://github.com/TJennerjahn/eyesight",
+      project_url: "https://github.com/TJennerjahn/eyesight-reminder",
     },
     {
       idx: 2,
