@@ -1,0 +1,152 @@
+---
+title: Switching to NixOS is easy, actually?!
+type: Post
+publishedAt: '2025-03-19'
+---
+
+This is a PSA for anyone who is thinking about switching to NixOS, but has been putting it off because it seems like the transition would be a pain: 
+
+ **You're wrong, just do it, it's actually super easy. No I'm not joking!**
+
+---
+
+Okay, with the important part out of the it's time for me to yap a bit about this, because I was genuinely surprised by it.
+Going by the many threads on reddit I'm not the only one who has been intrigued by promises that NixOS makes.
+A single declarative configuration file for your whole system, easily reproducible across machines, enabling version control and easy roll-backs for your system. No longer can a borked driver ruin your day - just roll back; no longer do you need to jump through insane hoops just to use different python versions - just use a dev shell; no longer do you need to choose between reliability and quick updates - just install with confidence every package under the sun from the largest package repository in the world.
+
+**Yes, Please!**
+
+It isn't without downsides however (or so I thought). Nix relies heavily on the eponymous configuration language that is so obtuse it doesn't even have its own Wikipedia entry. The ecosystem is build on top of a bunch of additional concepts that are much harder to grok than the basic idea, not least because they are terribly named. You got nixpkgs, modules, overlays and flakes. You got derivations and generations. There's nixos containers and nix shells. And then home-manager and more.
+
+And then some things seemingly require a lot more work than on other systems just to make them nix compatible, like the various configuration wrappers around neovim such as Nixvim, NVF or nixcats. How can I possibly argue that nixos is actually simple when the community can't even agree on the best way to *run* a program?
+
+*Because those complexities aren't real! You don't need any one them.*
+
+The truth is that running a basic Nixos system is so simple, only the advanced is really even worth talking about.
+
+Installing NixOS is easy. It uses the same Calamares based GUI installer that all the other distros use. You can choose between the same popular desktop environments that you can on any other distro - gnome, kde plasma, xfce, etc. - just choose your poison and off you go.
+
+This gives you a fully working system to start with. From here you can take a look at the only configuration file you'll ever need `/etc/nixos/configuration.nix`.
+It imports `hardware-configuration.nix` at the very top, so it's technically two configuration files, but nothing is stopping you from combining the two into one. I wouldn't recommend it, because as the name suggests it contains configurations specific to your hardware and having those separate makes it a lot easier to spin up another machine with the same configuration, but nothing is stopping you either, it's really just an import.
+
+The magic of this config file is immediately obvious. It contains a lot of system settings usually split across a bunch of separate files on other systems. Even after a decade of arch linux I still need to look up where to change keyboard layout, timezone, or hostname of the system. Not because it's particularly difficult on those systems, it's just not something I do often enough to remember it. With nix, it's all just there.
+
+However that's not the important part. Take a look at the syntax:
+
+```nix
+  users.users.tjennerjahn = {
+    isNormalUser = true;
+    description = "Tobias Jennerjahn";
+    extraGroups = ["networkmanager" "wheel"];
+    shell = pkgs.zsh;
+    packages = with pkgs; [
+      #  thunderbird
+    ];
+  };
+```
+
+If you just want to configure your system, this is what the nix language looks like. It's not quite json, but it's not that different either. The only aspects that are even mildly interesting enough to mention is that list elements aren't separated by a comma and the `with pkgs; []` syntax that makes it so that you can omit the `pkgs.` prefix you'd otherwise have to include for every package in that list.
+
+The nix language *can* do a lot more, but you really don't need any of it upfront.
+
+Here's a section from my `hardware-configuration.nix` that enables nvidia drivers for my gpu:
+
+```nix
+  hardware.graphics = {
+    enable = true;
+  };
+  services.xserver.videoDrivers = ["nvidia"];
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    powerManagement.finegrained = false;
+    open = true;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
+  };
+
+```
+
+I copied this from a wiki article **verbatim** and it *just* worked. Just reload the config with `sudo nixos-rebuild switch`, reboot and be done with it. Even it hadn't worked, I could've just rolled back to the previous config (for which nixos conveniently creates grub entries) and be confident that no trace of the driver software would be left over. The worst case scenario on arch would require me to boot from a live-usb and chroot into my system and try to fix it. This *cannot* happen on NixOS.
+
+
+After that I installed `hyprland`:
+```nix
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
+```
+
+Seriously, that's it. The last time I tried to use a wayland based compositor on my arch system I thought my RAM was dying because I had random, seemingly unrelated system crashes that were so bad I just switched back to xorg.
+
+---
+
+**So what's with all the other nonsense I mentioned above?**
+
+Just ignore it, seriously. Stuff like home-manager can be useful, but there are plenty of people who make due without it. Should you feel the need to use it, you can always adopt it later, incrementally.
+
+I will say that flakes are a useful concept. They introduce a way to pin versions of a software to a specific commit hash, similar to the `package.json` and `package.lock` file that npm has. This can be used to do a bunch of cool, but complicated things, however they also make it stupid easy to define dev environments on a per-project basis.
+
+The repository of this blog, for example, has a `flake.nix` file attached to it that looks like this:
+
+```nix
+{
+  description = "Next.js Development Environment";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
+
+  outputs = { self, nixpkgs, flake-utils, ... }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+        };
+      in {
+        devShell = pkgs.mkShell {
+          buildInputs = with pkgs; [
+            nodejs_20       # Node.js LTS version
+          ];
+
+          shellHook = ''
+            echo "🌿 Entering Next.js development shell."
+            node --version
+          '';
+        };
+      }
+    );
+}
+
+```
+
+The specifics of this aren't important at all, it really only matters that this allows me to make nodejs_20 available whenever I run `nix develop` in the repo directory to spin up a development shell. This has access to *all* my system packages and also specifically nodejs 20. I don't even have nodejs installed on this system. If I had, the available version would be overwritten by what's defined in the flake.
+
+This is quite a simple example that I've written myself before I realised that (obviously) other people had already done all the work for me.
+
+[This repo](https://github.com/the-nix-way/dev-templates/) has templates for many many languages that are easily customizable and can be installed with a single command like this:
+```bash
+nix flake init --template "https://flakehub.com/f/the-nix-way/dev-templates/*#rust"
+```
+
+If you're a dev, the fact that this just works might be genuinely hard to believe. But it does.
+
+---
+
+To close this out I want to mention two more minor pitfalls.
+
+The first one is simple: The shebang for bash scripts is different on NixOS.
+Instead of: `#!/bin/bash` you have to write `#!/usr/bin/env bash`. It's a drop in replacement and requires no other changes.
+
+The other one is more conceptual in nature: NixOS is still just linux.
+You'll find hundreds of threads of nix users arguing over the best way to do certain things the nix way.
+That's how you get three competing aproaches to manage neovim. Reading those, it's easy to forget nix configuration files don't magically change how software works.
+All the usual config stuff going on in your `~/.config/` directory is still there and still works exactly as it does on any other distro. NixOS people like to find ways to manage all of that with the nix language, but that's not a requirement at all. I struggled to port over my neovim setup because I didn't see an AstroNvim package and I thought I had to deal with a complicated nix based wrapper, but that's just not the case. I ended up simply copying over my `.config/nvim` directory and it *just* worked. The only change I needed to make was to disable mason. It doesn't easily work on NixOS, but that's not a problem at all, because every language server you could dream of has a nix packages available and you can just add those to your `configuration.nix` and then enable them in neovim.
+
+---
+
+So. Just give it shot. Don't get distracted by the overwhelming possibilities. You can explore those later.
+Just set up your system and enjoy all those sweet advantages without worrying about any of the complexities.
+You can always explore those later if you want to. Or don't, they are completely optional.
