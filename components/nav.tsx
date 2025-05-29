@@ -32,6 +32,9 @@ const navItems = {
   "/blog/articles": {
     name: "Blog",
   },
+  "/cv": {
+    name: "CV",
+  }
 };
 
 export function Navbar() {
