@@ -1,6 +1,6 @@
 import { getPosts } from "app/blog/utils";
 import { BookReview } from "components/BookReview";
-import getBookByISBN from "lib/hardcover";
+import getBookByISBN, { BookData, EMPTY_BOOK_DATA } from "lib/hardcover";
 
 export const metadata = {
   title: "Reviews",
@@ -11,7 +11,7 @@ export default async function Page() {
   const reviews = getPosts().filter((e) => e.metadata.type === "Review");
 
   // Create a map to store book data for each review
-  const bookDataMap = new Map();
+  const bookDataMap = new Map<string, BookData>();
 
   // Fetch book data for each review
   for (const review of reviews) {
@@ -40,7 +40,7 @@ export default async function Page() {
             <BookReview
               key={post.slug}
               post={post}
-              bookData={bookDataMap.get(post.slug)}
+              bookData={bookDataMap.get(post.slug) ?? EMPTY_BOOK_DATA}
             />
           ))}
       </div>
