@@ -9,7 +9,7 @@ export const metadata = {
 export default function Page() {
   const blogPosts = getPosts().filter((e) => e.metadata.type === "Post");
   return (
-    <section>
+    <section className="md:max-w-xl md:mx-auto">
       <h1 className="font-semibold text-2xl mb-8 tracking-tighter">Articles</h1>
 
       <div>

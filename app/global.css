@@ -112,11 +112,69 @@ html {
 }
 
 .prose ul {
-  @apply list-disc pl-6;
+  @apply list-disc pl-6 my-4;
 }
 
 .prose ol {
-  @apply list-decimal pl-6;
+  @apply list-decimal pl-6 my-4;
+}
+
+.prose li {
+  @apply my-1 text-neutral-800 dark:text-neutral-200;
+}
+
+.prose li::marker {
+  color: rgb(115 115 115);
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose li::marker {
+    color: rgb(163 163 163);
+  }
+}
+
+.prose blockquote {
+  @apply my-6 border-l-4 border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-4 py-3 italic text-neutral-700 dark:text-neutral-300 rounded-r-md;
+}
+
+.prose blockquote p {
+  @apply my-2;
+}
+
+.prose hr {
+  @apply my-8 border-0 border-t border-neutral-200 dark:border-neutral-800;
+}
+
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  @apply my-6 rounded-lg border border-neutral-200 dark:border-neutral-800;
+}
+
+.prose thead {
+  @apply bg-neutral-100 dark:bg-neutral-900;
+}
+
+.prose tbody tr {
+  @apply border-t border-neutral-200 dark:border-neutral-800;
+}
+
+.prose th {
+  @apply px-3 py-2 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100;
+}
+
+.prose td {
+  @apply px-3 py-2 text-sm text-neutral-700 dark:text-neutral-300;
+}
+
+.prose kbd {
+  @apply rounded border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 px-1.5 py-0.5 text-xs;
+}
+
+.prose mark {
+  @apply bg-yellow-100 dark:bg-yellow-900/40 px-1 rounded;
 }
 
 .prose > :first-child {
@@ -140,13 +198,6 @@ input[type="email"] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-}
-
-table {
-  display: block;
-  max-width: fit-content;
-  overflow-x: auto;
-  white-space: nowrap;
 }
 
 .title {

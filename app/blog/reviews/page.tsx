@@ -22,7 +22,7 @@ export default async function Page() {
   }
 
   return (
-    <section>
+    <section className="md:max-w-xl md:mx-auto">
       <h1 className="font-semibold text-2xl mb-8 tracking-tighter">Reviews</h1>
 
       <div>

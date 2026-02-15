@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
+import NextImage from 'next/image'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { highlight } from 'sugar-high'
 import React from 'react'
@@ -45,7 +45,42 @@ function CustomLink(props) {
 }
 
 function RoundedImage(props) {
-  return <Image alt={props.alt} className="rounded-lg" {...props} />
+  const { alt, className, width, height, fill, ...rest } = props
+  const mergedClassName = className ? `rounded-lg ${className}` : 'rounded-lg'
+
+  const parsedWidth =
+    typeof width === 'string' ? Number.parseInt(width, 10) : width
+  const parsedHeight =
+    typeof height === 'string' ? Number.parseInt(height, 10) : height
+  const hasDimensions =
+    Number.isFinite(parsedWidth) &&
+    parsedWidth > 0 &&
+    Number.isFinite(parsedHeight) &&
+    parsedHeight > 0
+
+  if (fill || hasDimensions) {
+    return (
+      <NextImage
+        alt={alt || ''}
+        className={mergedClassName}
+        width={hasDimensions ? parsedWidth : undefined}
+        height={hasDimensions ? parsedHeight : undefined}
+        fill={fill}
+        {...rest}
+      />
+    )
+  }
+
+  return (
+    <img
+      alt={alt || ''}
+      className={mergedClassName}
+      width={width}
+      height={height}
+      loading="lazy"
+      {...rest}
+    />
+  )
 }
 
 function Code({ children, ...props }) {
@@ -94,6 +129,7 @@ let components = {
   h5: createHeading(5),
   h6: createHeading(6),
   Image: RoundedImage,
+  img: RoundedImage,
   a: CustomLink,
   code: Code,
   Table,

@@ -73,7 +73,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       {/* Main content with padding for sidebar */}
       <div className="pl-12">
-        <div className="antialiased max-w-xl mx-4 md:mx-auto">{children}</div>
+        <div className="antialiased max-w-xl md:max-w-4xl mx-4 md:mx-auto">
+          {children}
+        </div>
       </div>
     </div>
   );
