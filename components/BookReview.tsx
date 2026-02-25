@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Post, formatDate } from "app/blog/utils";
 import Image from "next/image";
 import { BookOpen, CalendarDays, UserPen } from "lucide-react";
-import { BookData } from "lib/hardcover";
+import { BookData } from "lib/book-data";
 
 export function BookReview({
   post,

@@ -1,6 +1,8 @@
 {
   "private": true,
   "scripts": {
+    "generate:book-data": "node scripts/generate-review-book-data.mjs",
+    "prebuild": "npm run generate:book-data",
     "dev": "next dev",
     "build": "next build",
     "start": "next start"

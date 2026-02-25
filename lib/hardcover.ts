@@ -1,27 +1,23 @@
 import { gql, GraphQLClient } from "graphql-request";
-
-export type BookData = {
-  title: string;
-  imageUrl: string;
-  description: string;
-  pageCount: string;
-  isbn_13: string;
-  authors: string[];
-};
-
-export const EMPTY_BOOK_DATA: BookData = {
-  title: "",
-  imageUrl: "",
-  description: "",
-  pageCount: "",
-  isbn_13: "",
-  authors: [],
-};
+import { BookData, EMPTY_BOOK_DATA } from "lib/book-data";
 
 const endpoint = "https://api.hardcover.app/v1/graphql";
 
+function normalizeToken(rawToken: string | undefined) {
+  if (!rawToken) {
+    return null;
+  }
+
+  const trimmed = rawToken.trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  return trimmed.replace(/^Bearer\s+/i, "").trim();
+}
+
 export default async function getBookByISBN(isbn_13: string) {
-  const token = process.env.HARDCOVER_BEARER_TOKEN;
+  const token = normalizeToken(process.env.HARDCOVER_BEARER_TOKEN);
 
   if (!token) {
     return {
@@ -45,7 +41,9 @@ export default async function getBookByISBN(isbn_13: string) {
       ) {
         id
         title
-        description
+        book {
+          description
+        }
         edition_format
         pages
         release_date
@@ -94,7 +92,7 @@ export default async function getBookByISBN(isbn_13: string) {
     const bookData: BookData = {
       title: String(edition.title || ""),
       imageUrl: String(edition.image?.url || ""),
-      description: String(edition.description || ""),
+      description: String(edition.book?.description || ""),
       pageCount: edition.pages ? String(edition.pages) : "",
       isbn_13: String(edition.isbn_13 || isbn_13),
       authors: authors,

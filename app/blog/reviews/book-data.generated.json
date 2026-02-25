@@ -1,0 +1,42 @@
+{
+  "Everything_is_Tuberculosis": {
+    "title": "Everything Is Tuberculosis: The History and Persistence of Our Deadliest Infection",
+    "imageUrl": "/review-covers/Everything_is_Tuberculosis.jpg",
+    "description": "John Green, the #1 bestselling author of The Anthropocene Reviewed and a passionate advocate for global healthcare reform, tells a deeply human story illuminating the fight against the world’s deadliest infectious disease.\n\nTuberculosis has been entwined with hu­manity for millennia. Once romanticized as a malady of poets, today tuberculosis is seen as a disease of poverty that walks the trails of injustice and inequity we blazed for it.\n\nIn 2019, author John Green met Henry Reider, a young tuberculosis patient at Lakka Government Hospital in Sierra Leone. John be­came fast friends with Henry, a boy with spindly legs and a big, goofy smile. In the years since that first visit to Lakka, Green has become a vocal advocate for increased access to treatment and wider awareness of the healthcare inequi­ties that allow this curable, preventable infec­tious disease to also be the deadliest, killing over a million people every year.\n\nIn Everything Is Tuberculosis, John tells Henry’s story, woven through with the scientific and social histories of how tuberculosis has shaped our world—and how our choices will shape the future of tuberculosis.",
+    "pageCount": "208",
+    "isbn_13": "9780525426059",
+    "authors": [
+      "John Green"
+    ]
+  },
+  "Kaput_The_End_of_the_German_Miracle": {
+    "title": "Kaput: The End of the German Miracle",
+    "imageUrl": "/review-covers/Kaput_The_End_of_the_German_Miracle.jpg",
+    "description": "Until recently, Germany appeared to be a paragon of economic and political success. Angela Merkel was widely seen as the true 'leader of the free world', and Germany's export-driven economic model seemed to deliver prosperity. But recent events – from Germany's dependence on Russian gas to its car industry's delays in the race to electric – have undermined this view. In Kaput, Wolfgang Münchau argues that the weaknesses of Germany's economy have, in fact, been brewing for decades. The neo-mercantilist policies of the German state, driven by close connections between the country's industrial and political elite, have left Germany technologically behind over-reliant on authoritarian Russia and China – and with little sign of being able to adapt to the digital realities of the 21st century. It is an essential read for anyone interested in the future of Europe's biggest economy.",
+    "pageCount": "210",
+    "isbn_13": "9781800753440",
+    "authors": [
+      "Wolfgang Münchau"
+    ]
+  },
+  "ambessa": {
+    "title": "Ambessa: Chosen of the Wolf: A League of Legends: Arcane Novel",
+    "imageUrl": "/review-covers/ambessa.jpg",
+    "description": "Set in the blockbuster and award-winning universe of League of Legends: Arcane and written by award-winning author C. L. Clark, discover a thrilling epic fantasy novel where Ambessa Medarda truly learns what it means to be a Chosen of the Wolf. Medarda over all. Ambessa Medarda: Warrior, general, mother. She is a woman to be feared, and the Medardas are unrivaled in their pursuit of glory. She has led conquests and armies. She has slain legendary beasts. She has made grave sacrifices in her ascent up the ranks. And for this she was rewarded: She entered the realm of death and was granted a vision of herself upon the throne of the vast Noxian empire. But before she can lead her empire, she must become head of her own clan. Yet the title is contested by her cousin and former confidante, Ta'Fik. He knows the bloody sins of Ambessa's past. And he knows he cannot allow her to rise. They will fight a war for the very soul of the Medardas. But the war won't be fought on battlefields alone. Ambessa's daughter, Mel, can deftly break through the walls around anyone's heart, and she'll put her talents to use for her mother. Yet despite Mel's strength, Ambessa sees only a child who lacks her killer instincts. Mel knows she can be the leader Ambessa wants her to be, if only she gives her time. With her family betraying her, enemies closing in on all sides, and unseen forces moving in the shadows, every day proves more dangerous than the last. But Ambessa will not bow. She will burn the world down to claim her place in it.",
+    "pageCount": "448",
+    "isbn_13": "9780316470056",
+    "authors": [
+      "C.L. Clark"
+    ]
+  },
+  "core-java": {
+    "title": "Core Java for the Impatient, 4th Edition",
+    "imageUrl": "/review-covers/core-java.jpg",
+    "description": "Modern Java introduces major enhancements that impact the core Java technologies and APIs at the heart of the Java platform. Many old Java idioms are no longer needed, and new features and programming paradigms can make you far more effective. However, navigating these changes can be challenging. Core Java for the Impatient, Fourth Edition, is a complete yet concise guide that reflects all changes through Java SE 21, Oracle's latest Long-Term Support (LTS) release. Written by Cay S. Horstmann--author of the classic two-volume Core Java--this indispensable tutorial offers a faster, easier pathway for learning modern Java. Horstmann covers everything working developers need to know, including the powerful concepts of lambda expressions and streams, modern constructs such as records and sealed classes, and sophisticated concurrent programming techniques. Given the size and scope of Java 21, there's plenty to cover, but it's presented in small chunks organized for quick access and easy understanding, with plenty of practical insights and sample code to help you quickly apply all that's new. Test code as you create it with JShell Improve your object-oriented design with records and sealed classes Effectively use text blocks, switch expressions, and pattern matching Understand functional programming with lambda expressions Streamline and optimize data management with the Streams API Use structured techniques, threadsafe data structures, and virtual threads for effective concurrent programming Work with the modularized Java API and third-party modules Take advantage of API improvements for working with collections, input/output, regular expressions, and processes Whether you're an experienced developer just getting started with modern Java, or have been programming with Java for years, this guide will help you write more robust, efficient, and secure Java code.",
+    "pageCount": "512",
+    "isbn_13": "9780135404546",
+    "authors": [
+      "Cay Horstmann"
+    ]
+  }
+}
