@@ -9,8 +9,10 @@ export const dynamic = "force-dynamic";
 function createCallbackResponse(
   status: "success" | "error",
   payload: Record<string, string>,
+  targetOrigin: string,
 ) {
   const serializedPayload = JSON.stringify(payload).replace(/</g, "\\u003c");
+  const serializedOrigin = JSON.stringify(targetOrigin);
 
   return new NextResponse(
     `<!doctype html>
@@ -19,17 +21,35 @@ function createCallbackResponse(
     <meta charset="utf-8" />
     <title>Decap Authorization</title>
     <script>
-      const receiveMessage = () => {
-        window.opener.postMessage(
-          'authorization:github:${status}:${serializedPayload}',
-          '*'
-        );
+      const targetOrigin = ${serializedOrigin};
+      const authMessage = 'authorization:github:${status}:${serializedPayload}';
+      let didFinish = false;
+
+      function finishAuth() {
+        if (didFinish || !window.opener || window.opener.closed) {
+          return;
+        }
+
+        didFinish = true;
+        window.opener.postMessage(authMessage, targetOrigin);
         window.removeEventListener('message', receiveMessage, false);
-        window.close();
+        window.setTimeout(() => window.close(), 100);
+      }
+
+      const receiveMessage = (event) => {
+        if (event.origin !== targetOrigin) {
+          return;
+        }
+
+        finishAuth();
       };
 
       window.addEventListener('message', receiveMessage, false);
-      window.opener.postMessage('authorizing:github', '*');
+
+      if (window.opener && !window.opener.closed) {
+        window.opener.postMessage('authorizing:github', targetOrigin);
+        window.setTimeout(finishAuth, 150);
+      }
     </script>
   </head>
   <body>
@@ -49,11 +69,12 @@ export async function GET(request: NextRequest) {
   if (provider !== "github") {
     return new NextResponse("Invalid provider", { status: 400 });
   }
+  const targetOrigin = request.nextUrl.origin;
 
   if (!isDecapAuthConfigured()) {
     return createCallbackResponse("error", {
       error: "Decap GitHub auth is not configured on this deployment.",
-    });
+    }, targetOrigin);
   }
 
   const state = request.nextUrl.searchParams.get("state");
@@ -61,14 +82,14 @@ export async function GET(request: NextRequest) {
   if (!state || !storedState || state !== storedState) {
     return createCallbackResponse("error", {
       error: "Invalid OAuth state.",
-    });
+    }, targetOrigin);
   }
 
   const code = request.nextUrl.searchParams.get("code");
   if (!code) {
     return createCallbackResponse("error", {
       error: "Missing OAuth code.",
-    });
+    }, targetOrigin);
   }
 
   const tokenResponse = await fetch("https://github.com/login/oauth/access_token", {
@@ -94,12 +115,12 @@ export async function GET(request: NextRequest) {
         tokenPayload.error_description ||
         tokenPayload.error ||
         "GitHub token exchange failed.",
-    });
+    }, targetOrigin);
   }
 
   const response = createCallbackResponse("success", {
     token: tokenPayload.access_token,
-  });
+  }, targetOrigin);
   response.cookies.set({
     name: getDecapStateCookieName(),
     value: "",
@@ -112,4 +133,3 @@ export async function GET(request: NextRequest) {
 
   return response;
 }
-
