@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { gql, GraphQLClient } from "graphql-request";
 import nextEnv from "@next/env";
+import matter from "gray-matter";
 
 const { loadEnvConfig } = nextEnv;
 loadEnvConfig(process.cwd());
@@ -62,30 +63,6 @@ const CONTENT_TYPE_EXTENSION_MAP = {
   "image/gif": ".gif",
 };
 
-function parseFrontmatter(fileContent) {
-  const frontmatterRegex = /---\s*([\s\S]*?)\s*---/;
-  const match = frontmatterRegex.exec(fileContent);
-  if (!match) {
-    return {};
-  }
-
-  const frontMatterLines = match[1].trim().split("\n");
-  const metadata = {};
-
-  frontMatterLines.forEach((line) => {
-    const [key, ...valueArr] = line.split(": ");
-    if (!key || valueArr.length === 0) {
-      return;
-    }
-
-    let value = valueArr.join(": ").trim();
-    value = value.replace(/^['"](.*)['"]$/, "$1");
-    metadata[key.trim()] = value;
-  });
-
-  return metadata;
-}
-
 function getReviewPosts() {
   return fs
     .readdirSync(POSTS_DIR)
@@ -93,7 +70,7 @@ function getReviewPosts() {
     .map((file) => {
       const filePath = path.join(POSTS_DIR, file);
       const fileContent = fs.readFileSync(filePath, "utf-8");
-      const metadata = parseFrontmatter(fileContent);
+      const metadata = matter(fileContent).data;
       return {
         slug: path.basename(file, ".mdx"),
         type: metadata.type,

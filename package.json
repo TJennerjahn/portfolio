@@ -4,6 +4,8 @@
     "generate:book-data": "node scripts/generate-review-book-data.mjs",
     "prebuild": "npm run generate:book-data",
     "dev": "next dev",
+    "cms:proxy": "decap-server",
+    "dev:cms": "concurrently \"npm:dev\" \"npm:cms:proxy\"",
     "build": "next build",
     "start": "next start"
   },
@@ -19,6 +21,7 @@
     "geist": "1.2.2",
     "graphql": "^16.10.0",
     "graphql-request": "^7.1.2",
+    "gray-matter": "^4.0.3",
     "lucide-react": "^0.476.0",
     "motion": "^12.4.7",
     "next": "canary",
@@ -30,5 +33,9 @@
     "sugar-high": "^0.6.0",
     "tailwindcss": "4.0.0-alpha.13",
     "typescript": "5.3.3"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "decap-server": "^3.6.0"
   }
 }

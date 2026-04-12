@@ -40,3 +40,24 @@ pnpm dev
 ```
 
 Deploy it to the cloud with [Vercel](https://vercel.com/templates) ([Documentation](https://nextjs.org/docs/app/building-your-application/deploying)).
+
+## Writing Posts with Decap CMS
+
+This repo includes a Decap CMS editor at `/admin` that writes directly to
+`app/blog/posts/*.mdx`.
+
+For local authoring, run:
+
+```bash
+npm run dev:cms
+```
+
+Then open `http://localhost:3000/admin`.
+
+If you want `/admin` to work on a deployed environment too, create a GitHub OAuth
+app and configure the environment variables from `.env.example`. The callback URL
+for that OAuth app should be:
+
+```text
+https://your-domain.example/api/decap/callback?provider=github
+```

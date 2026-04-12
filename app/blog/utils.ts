@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import matter from "gray-matter";
 
 export type Post = {
   metadata: Metadata;
@@ -10,28 +11,48 @@ export type Post = {
 type Metadata = {
   title: string;
   publishedAt: string;
-  summary: string;
+  summary?: string;
   image?: string;
   type: string;
   isbn?: string;
+  rating?: string | number;
 };
 
+function toOptionalString(value: unknown) {
+  if (value === undefined || value === null || value === "") {
+    return undefined;
+  }
+
+  return String(value);
+}
+
+function toDateString(value: unknown) {
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString().slice(0, 10);
+  }
+
+  return String(value ?? "");
+}
+
 function parseFrontmatter(fileContent: string) {
-  let frontmatterRegex = /---\s*([\s\S]*?)\s*---/;
-  let match = frontmatterRegex.exec(fileContent);
-  let frontMatterBlock = match![1];
-  let content = fileContent.replace(frontmatterRegex, "").trim();
-  let frontMatterLines = frontMatterBlock.trim().split("\n");
-  let metadata: Partial<Metadata> = {};
+  const { data, content } = matter(fileContent);
+  const metadata: Metadata = {
+    title: String(data.title ?? ""),
+    publishedAt: toDateString(data.publishedAt),
+    summary: toOptionalString(data.summary),
+    image: toOptionalString(data.image),
+    type: String(data.type ?? ""),
+    isbn: toOptionalString(data.isbn),
+    rating:
+      data.rating === undefined || data.rating === null || data.rating === ""
+        ? undefined
+        : data.rating,
+  };
 
-  frontMatterLines.forEach((line) => {
-    let [key, ...valueArr] = line.split(": ");
-    let value = valueArr.join(": ").trim();
-    value = value.replace(/^['"](.*)['"]$/, "$1"); // Remove quotes
-    metadata[key.trim() as keyof Metadata] = value;
-  });
-
-  return { metadata: metadata as Metadata, content };
+  return {
+    metadata,
+    content: content.trim(),
+  };
 }
 
 function getMDXFiles(dir) {
@@ -59,6 +80,38 @@ function getMDXData(dir): Post[] {
 
 export function getPosts() {
   return getMDXData(path.join(process.cwd(), "app", "blog", "posts"));
+}
+
+function stripMarkdown(content: string) {
+  return content
+    .replace(/^import\s.+$/gm, "")
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1 ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/^#+\s+/gm, "")
+    .replace(/^>\s?/gm, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function trimExcerpt(text: string, maxLength = 180) {
+  if (text.length <= maxLength) {
+    return text;
+  }
+
+  const truncated = text.slice(0, maxLength);
+  const lastSpace = truncated.lastIndexOf(" ");
+
+  return `${truncated.slice(0, lastSpace > 0 ? lastSpace : maxLength).trim()}…`;
+}
+
+export function getPostDescription(post: Post) {
+  if (post.metadata.summary?.trim()) {
+    return post.metadata.summary.trim();
+  }
+
+  return trimExcerpt(stripMarkdown(post.content));
 }
 
 export function formatDate(date: string, includeRelative = false) {

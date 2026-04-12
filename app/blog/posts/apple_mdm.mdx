@@ -29,12 +29,24 @@ Guess what, the only requirements to make use of this are access to a mac. You d
 2. Connect your iPhone
 	1. If prompted, confirm that you trust the computer
 3. Your phone will show up in the configurator. Select it.
-4. Hit the prepare icon in the menu bar:![](/20250325102113.png)
-5. Select Manual Configuration ![](/20250325102236.png)
+4. Hit the prepare icon in the menu bar:
+
+   ![Prepare a device in Apple Configurator](/blog-images/apple-mdm-prepare-device.png)
+
+5. Select Manual Configuration.
+
+   ![Select manual configuration in Apple Configurator](/blog-images/apple-mdm-manual-configuration.png)
+
 6. For your MDM Server, select *"Do not enroll in MDM"*
 7. Organization: *"New Organization"*
-8. Then when it asks you to type in a phone numer or email, just hit skip. This is important! ![](/20250325102532.png)
-9. It will now ask you create an org. Just type in a name, then select Generate a new identity, at which point you'll be asked to configure the ios setup assistant. Just keep everything the way it is and press Prepare. ![](/20250325102848.png)
+8. Then when it asks you to type in a phone numer or email, just hit skip. This is important!
+
+   ![Skip the phone number or email step in Apple Configurator](/blog-images/apple-mdm-skip-contact-step.png)
+
+9. It will now ask you create an org. Just type in a name, then select Generate a new identity, at which point you'll be asked to configure the ios setup assistant. Just keep everything the way it is and press Prepare.
+
+   ![Create a new organization identity in Apple Configurator](/blog-images/apple-mdm-create-organization.png)
+
 10. At this Point you might be asked to reset your phone to factory settings. This is the only major downside of this approach. However, you'll only have to do this once so that your phone can become a managed phone. You don't need to reset for any permission changes later on.
 	1. If the process fails instead, just reset your phone manually and redo the steps afterwards. It'll then just work.
 
@@ -52,13 +64,14 @@ In the General Tab (which should be selected by default) give the profile a name
 Then, switch to the restrictions tab and press Configure.
 
 You'll be greeted by a long list of checkboxes, each representing a system feature of the iPhone that can be toggled. You can look through this, but the only thing I unchecked is the *Allow Installing apps* checkbox:
-![](/20250325104217.png)
+
+![Apple Configurator restrictions settings](/blog-images/apple-mdm-restrictions.png)
 
 Within the Restrictions Menu, switch to the Apps tab. Here I unchecked everything, although you might opt to keep some of it. Ultimately you'll have to decide for yourself if you want to keep Safari or not, but I urge you to give it a try. You can always reinstall it later. I usually find that the things I do need a browser for are usually much better done on a computer anyway. Rarely is something so urgent that I need to immediately look something up on my phone. If you live in an area where restaurants have moved away from physical menus and instead only provide a qr code that sends you to a website, then this might not be an option for you.
 
 On the bottom I also explicitly add App Store and Safari as apps that aren't allowed, just for good measure:
 
-![](/20250325104919.png)
+![Blocked apps in Apple Configurator](/blog-images/apple-mdm-blocked-apps.png)
 
 If you opt to keep Safari installed, you might be interested in restricting what websites you can visit. This can be done in the content-tab, where you can either whitelist, or blacklist certain urls. 
 
@@ -76,4 +89,3 @@ Sometimes the Apps list only shows placeholder entries. This seems to be a bug, 
 And that's it. Have fun enjoying your new dumb phone that didn't cost you anything to buy, let's you continue to benefit from all the actually useful features a modern smartphone offers and is genuinely, truly hard to waste time with. Believe me, I've tried.
 
 Okay, bye.
-
