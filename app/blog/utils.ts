@@ -14,6 +14,7 @@ type Metadata = {
   summary?: string;
   image?: string;
   type: string;
+  draft: boolean;
   isbn?: string;
   rating?: string | number;
 };
@@ -34,6 +35,18 @@ function toDateString(value: unknown) {
   return String(value ?? "");
 }
 
+function toBoolean(value: unknown) {
+  if (typeof value === "boolean") {
+    return value;
+  }
+
+  if (typeof value === "string") {
+    return value.toLowerCase() === "true";
+  }
+
+  return Boolean(value);
+}
+
 function parseFrontmatter(fileContent: string) {
   const { data, content } = matter(fileContent);
   const metadata: Metadata = {
@@ -42,6 +55,7 @@ function parseFrontmatter(fileContent: string) {
     summary: toOptionalString(data.summary),
     image: toOptionalString(data.image),
     type: String(data.type ?? ""),
+    draft: toBoolean(data.draft),
     isbn: toOptionalString(data.isbn),
     rating:
       data.rating === undefined || data.rating === null || data.rating === ""
@@ -79,7 +93,9 @@ function getMDXData(dir): Post[] {
 }
 
 export function getPosts() {
-  return getMDXData(path.join(process.cwd(), "app", "blog", "posts"));
+  return getMDXData(path.join(process.cwd(), "app", "blog", "posts")).filter(
+    (post) => !post.metadata.draft && Boolean(post.metadata.publishedAt.trim()),
+  );
 }
 
 function stripMarkdown(content: string) {

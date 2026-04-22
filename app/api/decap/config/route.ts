@@ -46,6 +46,14 @@ export async function GET(request: NextRequest) {
           fields: [
             { label: "Title", name: "title", widget: "string" },
             {
+              label: "Draft",
+              name: "draft",
+              widget: "boolean",
+              default: true,
+              required: false,
+              hint: "Draft posts are saved in the repo but hidden from the public site until this is turned off.",
+            },
+            {
               label: "Type",
               name: "type",
               widget: "select",
@@ -53,13 +61,15 @@ export async function GET(request: NextRequest) {
               default: "Post",
             },
             {
-              label: "Published",
+              label: "Publish Date",
               name: "publishedAt",
               widget: "datetime",
+              required: false,
               format: "YYYY-MM-DD",
               date_format: "YYYY-MM-DD",
               time_format: false,
               picker_utc: true,
+              hint: "Optional while drafting. Set this before publishing.",
             },
             {
               label: "Summary",

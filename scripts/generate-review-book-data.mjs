@@ -74,10 +74,13 @@ function getReviewPosts() {
       return {
         slug: path.basename(file, ".mdx"),
         type: metadata.type,
+        draft: metadata.draft === true || metadata.draft === "true",
         isbn: metadata.isbn ? String(metadata.isbn).trim() : "",
       };
     })
-    .filter((post) => post.type === "Review" && Boolean(post.isbn));
+    .filter(
+      (post) => post.type === "Review" && !post.draft && Boolean(post.isbn),
+    );
 }
 
 function readExistingData() {
