@@ -29,13 +29,17 @@ const navItems = {
   "/projects": {
     name: "Projects",
   },
-  "/blog/articles": {
+  "/blog": {
     name: "Blog",
   },
   "/cv": {
     name: "CV",
-  }
+  },
 };
+
+function isActivePath(pathname: string, path: string) {
+  return pathname === path || (path !== "/" && pathname.startsWith(path));
+}
 
 export function Navbar() {
   const pathname = usePathname();
@@ -45,7 +49,10 @@ export function Navbar() {
   // Use useLayoutEffect to measure DOM elements after render but before paint
   useLayoutEffect(() => {
     // Find the active element and measure it
-    const activeElement = navRefs.current.get(pathname);
+    const activePath = Object.keys(navItems).find((path) =>
+      isActivePath(pathname, path),
+    );
+    const activeElement = navRefs.current.get(activePath);
     if (activeElement) {
       const rect = activeElement.getBoundingClientRect();
       const parentRect = activeElement.parentElement.getBoundingClientRect();
@@ -84,7 +91,7 @@ export function Navbar() {
               string,
               { name: string; icon?: React.ReactNode },
             ]) => {
-              const isActive = pathname === path;
+              const isActive = isActivePath(pathname, path);
               return (
                 <Link
                   key={path}
