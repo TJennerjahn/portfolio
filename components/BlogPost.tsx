@@ -1,8 +1,10 @@
 import Link from "next/link";
-import { CalendarDays, FileText } from "lucide-react";
+import { CalendarDays, FileText, PawPrint } from "lucide-react";
 import { Post, formatDate, getPostDescription } from "app/blog/utils";
 
 export function BlogPost({ post }: { post: Post }) {
+  const Icon = post.slug === "my-dog-just-died" ? PawPrint : FileText;
+
   return (
     <div>
       <Link
@@ -12,7 +14,7 @@ export function BlogPost({ post }: { post: Post }) {
       >
         <div className="flex w-full gap-x-3">
           <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-white text-neutral-500 ring-1 ring-neutral-200 transition-colors group-hover:text-neutral-900 dark:bg-neutral-900 dark:text-neutral-400 dark:ring-neutral-800 dark:group-hover:text-neutral-100">
-            <FileText size={18} />
+            <Icon size={18} />
           </div>
 
           <div className="min-w-0">

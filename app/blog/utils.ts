@@ -440,7 +440,8 @@ function stripMarkdown(content: string) {
   return content
     .replace(/^import\s.+$/gm, "")
     .replace(/```[\s\S]*?```/g, " ")
-    .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1 ")
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, " ")
+    .replace(/!\[\[[^\]]+\]\]/g, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
     .replace(/^#+\s+/gm, "")
