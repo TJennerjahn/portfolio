@@ -41,23 +41,44 @@ pnpm dev
 
 Deploy it to the cloud with [Vercel](https://vercel.com/templates) ([Documentation](https://nextjs.org/docs/app/building-your-application/deploying)).
 
-## Writing Posts with Decap CMS
+## Writing Posts with Obsidian
 
-This repo includes a Decap CMS editor at `/admin` that writes directly to
-`app/blog/posts/*.mdx`.
+Open `content/blog` as an Obsidian vault. Blog articles live in
+`content/blog/Articles`, book reviews live in `content/blog/Reviews`, and shared
+post images live in `content/blog/Attachments`.
 
-For local authoring, run:
+Press `Cmd+N` / `Ctrl+N` in Obsidian to open the blog-entry selector. Choose
+`Blog Article` or `Book Review`, enter the title, and the vault-local
+`Blog Entry Templates` plugin creates the note in the correct folder with the
+frontmatter populated.
+
+Images pasted or dragged into a note are stored in `content/blog/Attachments`.
+The site syncs that folder to `public/blog-images` before development and
+production builds.
+
+The templates in `content/blog/Templates` include the frontmatter the site
+expects:
+
+- `type: Post` for normal blog articles
+- `type: Review` plus `isbn` and `rating` fields for book reviews
+- `draft: true` until the post should be published
+- `slug` for the public `/blog/:slug` URL
+
+The site understands standard Markdown links and images as well as Obsidian
+wikilinks. Examples:
+
+```markdown
+[[Another Post]]
+[[Another Post|custom link text]]
+![Screenshot](../Attachments/screenshot.png)
+![[screenshot.png|Screenshot]]
+```
+
+Run the site normally while editing:
 
 ```bash
-npm run dev:cms
+npm run dev
 ```
 
-Then open `http://localhost:3000/admin`.
-
-If you want `/admin` to work on a deployed environment too, create a GitHub OAuth
-app and configure the environment variables from `.env.example`. The callback URL
-for that OAuth app should be:
-
-```text
-https://your-domain.example/api/decap/callback?provider=github
-```
+`npm run dev` watches attachments and keeps `public/blog-images` in sync while
+you paste images. `npm run build` runs the sync once before building.

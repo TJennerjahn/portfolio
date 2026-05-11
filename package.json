@@ -2,10 +2,9 @@
   "private": true,
   "scripts": {
     "generate:book-data": "node scripts/generate-review-book-data.mjs",
-    "prebuild": "npm run generate:book-data",
-    "dev": "next dev",
-    "cms:proxy": "decap-server",
-    "dev:cms": "concurrently \"npm:dev\" \"npm:cms:proxy\"",
+    "sync:blog-assets": "node scripts/sync-blog-assets.mjs",
+    "prebuild": "npm run sync:blog-assets && npm run generate:book-data",
+    "dev": "node scripts/dev.mjs",
     "build": "next build",
     "start": "next start"
   },
@@ -22,6 +21,7 @@
     "graphql": "^16.10.0",
     "graphql-request": "^7.1.2",
     "gray-matter": "^4.0.3",
+    "katex": "^0.16.45",
     "lucide-react": "^0.476.0",
     "motion": "^12.4.7",
     "next": "canary",
@@ -30,12 +30,10 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^5.5.0",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0",
     "sugar-high": "^0.6.0",
     "tailwindcss": "4.0.0-alpha.13",
     "typescript": "5.3.3"
-  },
-  "devDependencies": {
-    "concurrently": "^9.2.1",
-    "decap-server": "^3.6.0"
   }
 }

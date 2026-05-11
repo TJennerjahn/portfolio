@@ -7,7 +7,12 @@ import matter from "gray-matter";
 const { loadEnvConfig } = nextEnv;
 loadEnvConfig(process.cwd());
 
-const POSTS_DIR = path.join(process.cwd(), "app", "blog", "posts");
+const POSTS_DIR = path.join(process.cwd(), "content", "blog");
+const IGNORED_POST_DIRECTORIES = new Set([
+  ".obsidian",
+  "Attachments",
+  "Templates",
+]);
 const OUTPUT_FILE = path.join(
   process.cwd(),
   "app",
@@ -63,16 +68,40 @@ const CONTENT_TYPE_EXTENSION_MAP = {
   "image/gif": ".gif",
 };
 
+function getMarkdownFiles(dir) {
+  if (!fs.existsSync(dir)) {
+    return [];
+  }
+
+  const files = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const entryPath = path.join(dir, entry.name);
+
+    if (entry.isDirectory()) {
+      if (!IGNORED_POST_DIRECTORIES.has(entry.name)) {
+        files.push(...getMarkdownFiles(entryPath));
+      }
+      continue;
+    }
+
+    if ([".md", ".mdx"].includes(path.extname(entry.name))) {
+      files.push(entryPath);
+    }
+  }
+
+  return files.sort();
+}
+
 function getReviewPosts() {
-  return fs
-    .readdirSync(POSTS_DIR)
-    .filter((file) => path.extname(file) === ".mdx")
-    .map((file) => {
-      const filePath = path.join(POSTS_DIR, file);
+  return getMarkdownFiles(POSTS_DIR)
+    .map((filePath) => {
       const fileContent = fs.readFileSync(filePath, "utf-8");
       const metadata = matter(fileContent).data;
       return {
-        slug: path.basename(file, ".mdx"),
+        slug:
+          metadata.slug && String(metadata.slug).trim()
+            ? String(metadata.slug).trim()
+            : path.basename(filePath, path.extname(filePath)),
         type: metadata.type,
         draft: metadata.draft === true || metadata.draft === "true",
         isbn: metadata.isbn ? String(metadata.isbn).trim() : "",
@@ -80,7 +109,18 @@ function getReviewPosts() {
     })
     .filter(
       (post) => post.type === "Review" && !post.draft && Boolean(post.isbn),
-    );
+    )
+    .sort((a, b) => {
+      if (a.slug < b.slug) {
+        return -1;
+      }
+
+      if (a.slug > b.slug) {
+        return 1;
+      }
+
+      return 0;
+    });
 }
 
 function readExistingData() {

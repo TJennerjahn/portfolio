@@ -1,0 +1,9 @@
+{
+  "id": "blog-entry-templates",
+  "name": "Blog Entry Templates",
+  "version": "1.0.0",
+  "minAppVersion": "1.5.0",
+  "description": "Creates blog articles and book reviews from vault templates.",
+  "author": "Tobias Jennerjahn",
+  "isDesktopOnly": false
+}

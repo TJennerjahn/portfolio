@@ -19,6 +19,9 @@
 .DS_Store
 *.pem
 .vscode
+content/blog/.obsidian/workspace*.json
+content/blog/.obsidian/appearance.json
+public/blog-images/*
 
 # debug
 npm-debug.log*

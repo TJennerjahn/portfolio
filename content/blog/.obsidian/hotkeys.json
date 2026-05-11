@@ -1,0 +1,12 @@
+{
+  "workspace:new-file": [],
+  "file-explorer:new-file": [],
+  "blog-entry-templates:new-blog-entry": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "N"
+    }
+  ]
+}

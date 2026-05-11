@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import NextImage from 'next/image'
 import { MDXRemote } from 'next-mdx-remote/rsc'
+import rehypeKatex from 'rehype-katex'
+import remarkMath from 'remark-math'
 import { highlight } from 'sugar-high'
 import React from 'react'
 
@@ -136,9 +138,19 @@ let components = {
 }
 
 export function CustomMDX(props) {
+  const mdxOptions = props.options?.mdxOptions || {}
+
   return (
     <MDXRemote
       {...props}
+      options={{
+        ...props.options,
+        mdxOptions: {
+          ...mdxOptions,
+          remarkPlugins: [...(mdxOptions.remarkPlugins || []), remarkMath],
+          rehypePlugins: [...(mdxOptions.rehypePlugins || []), rehypeKatex],
+        },
+      }}
       components={{ ...components, ...(props.components || {}) }}
     />
   )
