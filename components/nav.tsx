@@ -32,9 +32,6 @@ const navItems = {
   "/blog": {
     name: "Blog",
   },
-  "/cv": {
-    name: "CV",
-  },
 };
 
 function isActivePath(pathname: string, path: string) {
@@ -53,16 +50,19 @@ export function Navbar() {
       isActivePath(pathname, path),
     );
     const activeElement = navRefs.current.get(activePath);
-    if (activeElement) {
-      const rect = activeElement.getBoundingClientRect();
-      const parentRect = activeElement.parentElement.getBoundingClientRect();
-
-      // Calculate position relative to parent
-      setActiveRect({
-        left: rect.left - parentRect.left,
-        width: rect.width,
-      });
+    if (!activeElement) {
+      setActiveRect({ left: 0, width: 0 });
+      return;
     }
+
+    const rect = activeElement.getBoundingClientRect();
+    const parentRect = activeElement.parentElement.getBoundingClientRect();
+
+    // Calculate position relative to parent
+    setActiveRect({
+      left: rect.left - parentRect.left,
+      width: rect.width,
+    });
   }, [pathname]);
 
   return (
