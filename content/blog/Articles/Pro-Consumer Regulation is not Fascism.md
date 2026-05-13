@@ -10,8 +10,6 @@ aliases:
   - Pro-Consumer Regulation is not Fascism
 ---
 
-# Pro-Consumer Regulation is not Fascism
-
 I can't believe I have to say this, but pro-consumer regulation is not the same thing as fascism, and pretending otherwise is not a good-faith argument.
 
 I regularly see comments equating those two things whenever the EU introduces a new piece of regulation that protects consumers. Most recently in comments about a cnbc article with the following title:
