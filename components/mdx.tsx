@@ -5,6 +5,12 @@ import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 import { highlight } from 'sugar-high'
 import React from 'react'
+import fs from 'node:fs'
+import path from 'node:path'
+
+const PUBLIC_DIR = path.join(process.cwd(), 'public')
+const localImageDimensionsCache = new Map()
+const responsiveImageSizes = '(min-width: 768px) 56rem, calc(100vw - 3rem)'
 
 function Table({ data }) {
   let headers = data.headers.map((header, index) => (
@@ -46,28 +52,177 @@ function CustomLink(props) {
   return <a target="_blank" rel="noopener noreferrer" {...props} />
 }
 
+function readJpegDimensions(buffer) {
+  if (buffer[0] !== 0xff || buffer[1] !== 0xd8) {
+    return undefined
+  }
+
+  let offset = 2
+
+  while (offset < buffer.length) {
+    while (buffer[offset] === 0xff) {
+      offset += 1
+    }
+
+    const marker = buffer[offset]
+    offset += 1
+
+    if (marker === 0xd9 || marker === 0xda) {
+      break
+    }
+
+    if (marker >= 0xd0 && marker <= 0xd7) {
+      continue
+    }
+
+    if (offset + 2 > buffer.length) {
+      break
+    }
+
+    const length = buffer.readUInt16BE(offset)
+    if (length < 2 || offset + length > buffer.length) {
+      break
+    }
+
+    const isStartOfFrame =
+      (marker >= 0xc0 && marker <= 0xc3) ||
+      (marker >= 0xc5 && marker <= 0xc7) ||
+      (marker >= 0xc9 && marker <= 0xcb) ||
+      (marker >= 0xcd && marker <= 0xcf)
+
+    if (isStartOfFrame) {
+      return {
+        height: buffer.readUInt16BE(offset + 3),
+        width: buffer.readUInt16BE(offset + 5),
+      }
+    }
+
+    offset += length
+  }
+
+  return undefined
+}
+
+function readImageDimensions(filePath) {
+  const buffer = fs.readFileSync(filePath)
+  const extension = path.extname(filePath).toLowerCase()
+
+  if (
+    extension === '.png' &&
+    buffer.length >= 24 &&
+    buffer.subarray(0, 8).equals(
+      Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+    )
+  ) {
+    return {
+      width: buffer.readUInt32BE(16),
+      height: buffer.readUInt32BE(20),
+    }
+  }
+
+  if (
+    (extension === '.jpg' || extension === '.jpeg') &&
+    buffer.length >= 4
+  ) {
+    return readJpegDimensions(buffer)
+  }
+
+  if (
+    extension === '.gif' &&
+    buffer.length >= 10 &&
+    buffer.subarray(0, 3).toString('ascii') === 'GIF'
+  ) {
+    return {
+      width: buffer.readUInt16LE(6),
+      height: buffer.readUInt16LE(8),
+    }
+  }
+
+  return undefined
+}
+
+function getLocalImageDimensions(src) {
+  if (typeof src !== 'string' || !src.startsWith('/')) {
+    return undefined
+  }
+
+  const publicPath = src.split(/[?#]/)[0]
+  let decodedPath
+
+  try {
+    decodedPath = decodeURIComponent(publicPath)
+  } catch {
+    return undefined
+  }
+
+  const imagePath = path.join(PUBLIC_DIR, decodedPath.replace(/^\/+/, ''))
+  const relativePath = path.relative(PUBLIC_DIR, imagePath)
+
+  if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
+    return undefined
+  }
+
+  if (localImageDimensionsCache.has(imagePath)) {
+    return localImageDimensionsCache.get(imagePath)
+  }
+
+  let dimensions
+
+  try {
+    if (fs.existsSync(imagePath)) {
+      dimensions = readImageDimensions(imagePath)
+    }
+  } catch {
+    dimensions = undefined
+  }
+
+  localImageDimensionsCache.set(imagePath, dimensions)
+  return dimensions
+}
+
 function RoundedImage(props) {
-  const { alt, className, width, height, fill, ...rest } = props
-  const mergedClassName = className ? `rounded-lg ${className}` : 'rounded-lg'
+  const { alt, className, width, height, fill, sizes, src, style, ...rest } = props
+  const mergedClassName = [
+    'rounded-lg',
+    !fill && 'max-w-full h-auto',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   const parsedWidth =
     typeof width === 'string' ? Number.parseInt(width, 10) : width
   const parsedHeight =
     typeof height === 'string' ? Number.parseInt(height, 10) : height
-  const hasDimensions =
+  const hasProvidedDimensions =
     Number.isFinite(parsedWidth) &&
     parsedWidth > 0 &&
     Number.isFinite(parsedHeight) &&
     parsedHeight > 0
+  const localDimensions = hasProvidedDimensions
+    ? undefined
+    : getLocalImageDimensions(src)
+  const imageWidth = hasProvidedDimensions ? parsedWidth : localDimensions?.width
+  const imageHeight = hasProvidedDimensions
+    ? parsedHeight
+    : localDimensions?.height
+  const hasDimensions =
+    Number.isFinite(imageWidth) &&
+    imageWidth > 0 &&
+    Number.isFinite(imageHeight) &&
+    imageHeight > 0
 
   if (fill || hasDimensions) {
     return (
       <NextImage
         alt={alt || ''}
         className={mergedClassName}
-        width={hasDimensions ? parsedWidth : undefined}
-        height={hasDimensions ? parsedHeight : undefined}
+        src={src}
+        width={hasDimensions ? imageWidth : undefined}
+        height={hasDimensions ? imageHeight : undefined}
         fill={fill}
+        sizes={!fill ? sizes || responsiveImageSizes : sizes}
+        style={!fill ? { height: 'auto', ...style } : style}
         {...rest}
       />
     )
@@ -77,9 +232,12 @@ function RoundedImage(props) {
     <img
       alt={alt || ''}
       className={mergedClassName}
+      src={src}
       width={width}
       height={height}
       loading="lazy"
+      decoding="async"
+      style={style}
       {...rest}
     />
   )

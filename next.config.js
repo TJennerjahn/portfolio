@@ -7,6 +7,11 @@ module.exports = {
     ignoreBuildErrors: true,
   },
   images: {
-    domains: ["assets.hardcover.app"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "assets.hardcover.app",
+      },
+    ],
   },
 };
